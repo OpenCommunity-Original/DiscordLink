@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.logging.FileHandler;
 import java.util.logging.Logger;
@@ -55,7 +56,8 @@ public class DiscordLink {
         File configFile = new File(plugin.getDataDirectory(), "config.yml");
         if (!configFile.exists()) {
             try {
-                Files.copy(Path.of(Objects.requireNonNull(getClass().getResource("config.yml")).getPath()), configFile.toPath());
+                Files.copy(Paths.get("/config.yml"), configFile.toPath());
+                // TODO REMOVE Files.copy(Path.of(Objects.requireNonNull(getClass().getResource("config.yml")).getPath()), configFile.toPath());
                 LOGGER.severe("Created a new configuration file, please fill in the file");
             } catch (IOException e) {
                 LOGGER.severe("Unable to create configuration file");
