@@ -5,6 +5,7 @@ import com.github.riku32.discordlink.core.framework.PlatformPlayer;
 import com.github.riku32.discordlink.core.framework.command.ArgumentData;
 import com.github.riku32.discordlink.core.framework.command.CommandData;
 import com.github.riku32.discordlink.core.framework.command.CompiledCommand;
+import com.github.riku32.discordlink.spigot.utils.LocaleAPI;
 import com.google.common.collect.ImmutableList;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -49,14 +50,13 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
                 new com.github.riku32.discordlink.core.framework.command.CommandSender(bukkitPlayer != null ? playerRegistry.getPlayer(bukkitPlayer) : null, plugin);
 
         if (args.length < 1) {
-            sender.sendMessage(locale.getElement("command.version")
-                    .set("version", plugin.getDescription().getVersion()).toString());
+            sender.sendMessage(("Running OpenCommunity DiscordLink " + plugin.getDescription().getVersion()).toString());
             return true;
         }
 
         CompiledCommand command = commandMap.get(args[0]);
         if (command == null) {
-            sender.sendMessage(locale.getElement("command.invalid_command").error());
+            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_comman"));
             return false;
         }
 
