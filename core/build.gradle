@@ -1,10 +1,10 @@
 plugins {
-    id("io.ebean") version "12.12.0"
+    id("io.ebean") version "13.15.0"
 }
 
 // Resolve dependencies for LWJGL
 import org.gradle.internal.os.OperatingSystem
-project.ext.lwjglVersion = "3.3.0"
+project.ext.lwjglVersion = "3.3.1"
 switch (OperatingSystem.current()) {
     case OperatingSystem.LINUX:
         def osArch = System.getProperty("os.arch")
@@ -24,25 +24,25 @@ switch (OperatingSystem.current()) {
 }
 
 dependencies {
-    implementation 'org.xerial:sqlite-jdbc:3.36.0.3'
-    implementation 'mysql:mysql-connector-java:8.0.28'
-    implementation 'com.h2database:h2:2.1.210'
-    implementation 'org.postgresql:postgresql:42.3.1'
+    implementation 'org.xerial:sqlite-jdbc:[3.41.0.0, )'
+    implementation 'mysql:mysql-connector-java:[8.0.23, )'
+    implementation 'com.h2database:h2:[2.1.214, )'
+    implementation 'org.postgresql:postgresql:[42.6.0, )'
 
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'me.carleslc.Simple-YAML:Simple-Yaml:1.7.2'
-    implementation 'com.google.guava:guava:30.1.1-jre'
+    implementation 'org.apache.commons:commons-lang3:[3.12.0, )'
+    implementation 'me.carleslc.Simple-YAML:Simple-Yaml:[1.7.2, )'
+    implementation 'com.google.guava:guava:[31.1-jre, )'
 
-    implementation 'net.dv8tion:JDA:4.3.0_307'
-    implementation 'club.minnced:discord-webhooks:0.5.8'
+    implementation 'net.dv8tion:JDA:4.4.1_353'
+    implementation 'club.minnced:discord-webhooks:[0.8.2, )'
 
-    implementation 'io.ebean:ebean-core:12.14.1'
-    implementation 'io.ebean:ebean:12.14.1'
-    implementation 'io.ebean:ebean-migration:12.13.0'
-    implementation 'io.ebean:ebean-ddl-generator:12.14.1'
-    annotationProcessor 'io.ebean:querybean-generator:12.14.1'
+    implementation 'io.ebean:ebean-core:[13.15.0, )'
+    implementation 'io.ebean:ebean:[13.15.0, )'
+    implementation 'io.ebean:ebean-migration:[13.7.0, )'
+    implementation 'io.ebean:ebean-ddl-generator:[13.15.0, )'
+    annotationProcessor 'io.ebean:querybean-generator:[13.15.0, )'
 
-    implementation 'org.slf4j:slf4j-simple:2.0.0-alpha6'
+    implementation 'org.slf4j:slf4j-simple:[2.0.7, )'
 
     // Needed for db migration
     implementation 'javax.xml.bind:jaxb-api:2.3.1'

@@ -3,7 +3,6 @@ package com.github.riku32.discordlink.spigot.events;
 import com.github.riku32.discordlink.core.framework.PlatformPlayer;
 import com.github.riku32.discordlink.core.framework.eventbus.events.PlayerChatEvent;
 import com.github.riku32.discordlink.spigot.SpigotPlayer;
-import org.apache.commons.lang.NotImplementedException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +45,7 @@ public class SpigotChatEvent extends PlayerChatEvent {
 
         @NotNull
         public <T> T @NotNull [] toArray(@NotNull T @NotNull [] a) {
-            throw new NotImplementedException();
+            throw new UnsupportedOperationException();
         }
 
         public boolean add(E o) {

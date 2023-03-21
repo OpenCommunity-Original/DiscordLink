@@ -1,12 +1,11 @@
 name: DiscordLink
 version: "${version}"
 main: com.github.riku32.discordlink.spigot.DiscordLinkSpigot
-api-version: 1.16
+api-version: 1.19
 prefix: DiscordLink
 load: STARTUP
-authors: [ Riku32 ]
+authors: [ Riku32, Envel ]
 description: Discord to minecraft bridge
-website: https://github.com/Riku32/DiscordLink
 commands:
   discord:
     description: Access the DiscordLink plugin
