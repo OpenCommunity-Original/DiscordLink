@@ -22,8 +22,9 @@ public class Injector {
 
     /**
      * Inject dependencies into class instance
+     *
      * @param toInject object to inject dependencies into
-     * @throws DependencyNotNullException throws if a field registered as a dependency was not null
+     * @throws DependencyNotNullException  throws if a field registered as a dependency was not null
      * @throws DependencyNotFoundException throws if a required dependency was not registered
      */
     public void injectDependencies(Object toInject) throws DependencyNotNullException, DependencyNotFoundException {
@@ -36,7 +37,8 @@ public class Injector {
             try {
                 if (field.get(toInject) != null)
                     throw new DependencyNotNullException(field);
-            } catch (IllegalAccessException ignored) {}
+            } catch (IllegalAccessException ignored) {
+            }
 
             // Unnamed dependency injection
             Object dependency;
@@ -54,7 +56,8 @@ public class Injector {
 
             try {
                 field.set(toInject, dependency);
-            } catch (IllegalAccessException ignore) {}
+            } catch (IllegalAccessException ignore) {
+            }
         }
     }
 }

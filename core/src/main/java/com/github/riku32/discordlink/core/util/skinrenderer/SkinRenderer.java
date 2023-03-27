@@ -9,14 +9,13 @@ import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GLUtil;
 
 import javax.imageio.ImageIO;
-
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.*;
+import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,79 +25,80 @@ import java.util.logging.Level;
 import static com.github.riku32.discordlink.core.util.skinrenderer.Errors.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-import static org.lwjgl.opengl.GL14.*;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
+import static org.lwjgl.opengl.GL12.GL_RESCALE_NORMAL;
+import static org.lwjgl.opengl.GL14.GL_DEPTH_COMPONENT24;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class SkinRenderer extends Thread {
     public static final float[] vertices = {
             // Front
-            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, 1.0f,
             0, 0, 1,
-            1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, 1.0f,
             0, 0, 1,
-            1.0f,  1.0f,  1.0f,
+            1.0f, 1.0f, 1.0f,
             0, 0, 1,
-            -1.0f,  1.0f,  1.0f,
+            -1.0f, 1.0f, 1.0f,
             0, 0, 1,
             // Back
             -1.0f, -1.0f, -1.0f,
             0, 0, -1,
             1.0f, -1.0f, -1.0f,
             0, 0, -1,
-            1.0f,  1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
             0, 0, -1,
-            -1.0f,  1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
             0, 0, -1,
             // Top
-            -1.0f,  1.0f,  1.0f,
+            -1.0f, 1.0f, 1.0f,
             0, 1, 0,
-            1.0f,  1.0f,  1.0f,
+            1.0f, 1.0f, 1.0f,
             0, 1, 0,
-            1.0f,  1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
             0, 1, 0,
-            -1.0f,  1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
             0, 1, 0,
             // Bottom
             -1.0f, -1.0f, -1.0f,
             0, -1, 0,
             1.0f, -1.0f, -1.0f,
             0, -1, 0,
-            1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, 1.0f,
             0, -1, 0,
-            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, 1.0f,
             0, -1, 0,
             // Left
-            1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, 1.0f,
             1, 0, 0,
             1.0f, -1.0f, -1.0f,
             1, 0, 0,
-            1.0f,  1.0f, -1.0f,
+            1.0f, 1.0f, -1.0f,
             1, 0, 0,
-            1.0f,  1.0f,  1.0f,
+            1.0f, 1.0f, 1.0f,
             1, 0, 0,
             // Right
             -1.0f, -1.0f, -1.0f,
             -1, 0, 0,
-            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, 1.0f,
             -1, 0, 0,
-            -1.0f,  1.0f,  1.0f,
+            -1.0f, 1.0f, 1.0f,
             -1, 0, 0,
-            -1.0f,  1.0f, -1.0f,
+            -1.0f, 1.0f, -1.0f,
             -1, 0, 0,
     };
 
     public static final float[] planeVertices = {
-            -1.0f,  0.0f,  1.0f,
+            -1.0f, 0.0f, 1.0f,
             0, 1, 0,
-            1.0f,  0.0f,  1.0f,
+            1.0f, 0.0f, 1.0f,
             0, 1, 0,
-            1.0f,  0.0f, -1.0f,
+            1.0f, 0.0f, -1.0f,
             0, 1, 0,
-            -1.0f,  0.0f, -1.0f,
+            -1.0f, 0.0f, -1.0f,
             0, 1, 0,
     };
 
@@ -374,7 +374,7 @@ public class SkinRenderer extends Thread {
     }
 
     private byte[] process(RenderConfiguration renderConfiguration, int width, int height) throws Exception {
-       // Visage.log.info("Received a job to render a "+width+"x"+height+" "+mode.name().toLowerCase()+" for "+(profile == null ? "null" : profile.getName()));
+        // Visage.log.info("Received a job to render a "+width+"x"+height+" "+mode.name().toLowerCase()+" for "+(profile == null ? "null" : profile.getName()));
         glClearColor(0, 0, 0, 0);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         return draw(renderConfiguration, width, height);
@@ -397,7 +397,7 @@ public class SkinRenderer extends Thread {
 
         if (equal) {
             if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Skin has solid colored helm, stripping");
-            conf.getSkinTexture().setRGB(32, 0, 32, 16, new int[32*64], 0, 32);
+            conf.getSkinTexture().setRGB(32, 0, 32, 16, new int[32 * 64], 0, 32);
         }
 
         if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Got skin");
@@ -494,22 +494,22 @@ public class SkinRenderer extends Thread {
     }
 
     private void drawFlippedLimb(int x, int y, int u, int v) {
-        drawFlippedSkinQuad(x+4, y+4, u+4, v+4, 4, 12);
-        drawFlippedSkinQuad(x+12, y+4, u+12, v+4, 4, 12);
+        drawFlippedSkinQuad(x + 4, y + 4, u + 4, v + 4, 4, 12);
+        drawFlippedSkinQuad(x + 12, y + 4, u + 12, v + 4, 4, 12);
 
-        drawFlippedSkinQuad(x+4, y, u+4, v, 4, 4);
-        drawFlippedSkinQuad(x+8, y, u+8, v, 4, 4);
+        drawFlippedSkinQuad(x + 4, y, u + 4, v, 4, 4);
+        drawFlippedSkinQuad(x + 8, y, u + 8, v, 4, 4);
 
-        drawSkinQuad(x, y+4, u+8, v+4, 4, 12);
-        drawSkinQuad(x+8, y+4, u, v+4, 4, 12);
+        drawSkinQuad(x, y + 4, u + 8, v + 4, 4, 12);
+        drawSkinQuad(x + 8, y + 4, u, v + 4, 4, 12);
     }
 
     private void drawFlippedSkinQuad(int x, int y, int u, int v, int w, int h) {
-        drawQuad(x, y, x+w, y+h, (u+w)/64f, (v)/32f, (u)/64f, (v+h)/32f);
+        drawQuad(x, y, x + w, y + h, (u + w) / 64f, (v) / 32f, (u) / 64f, (v + h) / 32f);
     }
 
     private void drawSkinQuad(int x, int y, int u, int v, int w, int h) {
-        drawQuad(x, y, x+w, y+h, (u)/64f, (v)/32f, (u+w)/64f, (v+h)/32f);
+        drawQuad(x, y, x + w, y + h, (u) / 64f, (v) / 32f, (u + w) / 64f, (v + h) / 32f);
     }
 
     private void drawQuad(float x1, float y1, float x2, float y2, float u1, float v1, float u2, float v2) {

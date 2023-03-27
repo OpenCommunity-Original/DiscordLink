@@ -1,21 +1,20 @@
 package com.github.riku32.discordlink.core.listeners;
 
-import com.github.riku32.discordlink.core.config.Config;
 import com.github.riku32.discordlink.core.Constants;
-import com.github.riku32.discordlink.core.framework.PlatformPlugin;
-import com.github.riku32.discordlink.core.framework.eventbus.events.PlayerDeathEvent;
-import com.github.riku32.discordlink.core.util.MojangAPI;
-import com.github.riku32.discordlink.core.util.SkinUtil;
-import com.github.riku32.discordlink.core.util.TextUtil;
 import com.github.riku32.discordlink.core.bot.Bot;
+import com.github.riku32.discordlink.core.config.Config;
 import com.github.riku32.discordlink.core.database.PlayerInfo;
+import com.github.riku32.discordlink.core.framework.GameMode;
 import com.github.riku32.discordlink.core.framework.PlatformPlayer;
+import com.github.riku32.discordlink.core.framework.PlatformPlugin;
 import com.github.riku32.discordlink.core.framework.dependency.annotation.Dependency;
 import com.github.riku32.discordlink.core.framework.eventbus.annotation.EventHandler;
+import com.github.riku32.discordlink.core.framework.eventbus.events.PlayerDeathEvent;
 import com.github.riku32.discordlink.core.framework.eventbus.events.PlayerJoinEvent;
-import com.github.riku32.discordlink.core.framework.GameMode;
 import com.github.riku32.discordlink.core.framework.eventbus.events.PlayerQuitEvent;
-import com.github.riku32.discordlink.core.locale.Locale;
+import com.github.riku32.discordlink.core.locale.DiscordLocaleAPI;
+import com.github.riku32.discordlink.core.util.MojangAPI;
+import com.github.riku32.discordlink.core.util.TextUtil;
 import com.github.riku32.discordlink.core.util.skinrenderer.RenderType;
 import com.github.riku32.discordlink.core.util.skinrenderer.SkinRenderer;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -23,20 +22,18 @@ import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class PlayerStatusListener {
+    Locale en_US = new Locale("en", "US");
     @Dependency
     private PlatformPlugin platform;
 
     @Dependency
     private Config config;
-
-    @Dependency
-    private Locale locale;
 
     @Dependency
     private Bot bot;
@@ -58,16 +55,15 @@ public class PlayerStatusListener {
         Optional<PlayerInfo> playerInfoOptional = PlayerInfo.find.byUuidOptional(event.getPlayer().getUuid());
         if (playerInfoOptional.isEmpty()) {
             if (config.isLinkRequired()) {
-                event.getPlayer().sendMessage(locale.getElement("join.unregistered").info());
+                event.getPlayer().sendMessage(DiscordLocaleAPI.getMessage(en_US,"join_unregistered"));
                 event.getPlayer().setGameMode(GameMode.SPECTATOR);
                 frozenPlayers.add(event.getPlayer());
             }
         } else if (!playerInfoOptional.get().verified) {
             bot.getJda().retrieveUserById((playerInfoOptional.get().discordId)).queue(user -> {
-                event.getPlayer().sendMessage(TextUtil.colorize(locale.getElement("join.verify_link")
-                                .set("user_tag", user.getAsTag())
-                                .set("bot_tag", bot.getJda().getSelfUser().getAsTag())
-                                .info()));
+                event.getPlayer().sendMessage(TextUtil.colorize(DiscordLocaleAPI.getMessage(en_US ,"join_verify_link",
+                                "%user_tag%", user.getAsTag(),
+                                "%bot_tag%", bot.getJda().getSelfUser().getAsTag())));
 
                 if (config.isLinkRequired()) {
                     frozenPlayers.add(event.getPlayer());
@@ -98,39 +94,39 @@ public class PlayerStatusListener {
         bot.getJda().retrieveUserById((playerInfoOptional.get().discordId)).queue(user -> {
             Guild guild = bot.getGuild();
             guild.retrieveMemberById(playerInfoOptional.get().discordId).queue(
-                member -> {
-                    if (config.isStatusEnabled()) {
-                        platform.broadcast(TextUtil.colorize(config.getStatusJoinLinked()
-                                .replaceAll("%username%", event.getPlayer().getName())
-                                .replaceAll("%tag%", user.getAsTag()))
-                                .replaceAll("%color%", member.getColor() != null ?
-                                        TextUtil.colorToChatString(member.getColor()) : "&7"));
-                    }
-
-                    event.getPlayer().setGameMode(platform.getDefaultGameMode());
-
-                    if (config.isChannelBroadcastJoin()) {
-                        sendLinkedEventToChat(member, true,
-                                String.format("%s (%s) has joined", event.getPlayer().getName(), user.getAsTag()));
-                    }
-                },
-                ignored -> {
-                    if (config.isAllowUnlink()) {
-                        playerInfoOptional.get().delete();
-                        event.getPlayer().sendMessage(locale.getElement("join.left_server").error());
-
-                        if (config.isLinkRequired()) {
-                            frozenPlayers.add(event.getPlayer());
-                            event.getPlayer().setGameMode(GameMode.SPECTATOR);
-                            event.getPlayer().sendMessage(locale.getElement("link.link").info());
+                    member -> {
+                        if (config.isStatusEnabled()) {
+                            platform.broadcast(TextUtil.colorize(config.getStatusJoinLinked()
+                                            .replaceAll("%username%", event.getPlayer().getName())
+                                            .replaceAll("%tag%", user.getAsTag()))
+                                    .replaceAll("%color%", member.getColor() != null ?
+                                            TextUtil.colorToChatString(member.getColor()) : "&7"));
                         }
 
-                        return;
-                    }
+                        event.getPlayer().setGameMode(platform.getDefaultGameMode());
 
-                    event.getPlayer().kickPlayer(TextUtil.colorize(
-                            config.getKickNotInGuild().replaceAll("%tag%", user.getAsTag())));
-                }
+                        if (config.isChannelBroadcastJoin()) {
+                            sendLinkedEventToChat(member, true,
+                                    String.format("%s (%s) has joined", event.getPlayer().getName(), user.getAsTag()));
+                        }
+                    },
+                    ignored -> {
+                        if (config.isAllowUnlink()) {
+                            playerInfoOptional.get().delete();
+                            event.getPlayer().sendMessage(DiscordLocaleAPI.getMessage(en_US ,"join_left_server"));
+
+                            if (config.isLinkRequired()) {
+                                frozenPlayers.add(event.getPlayer());
+                                event.getPlayer().setGameMode(GameMode.SPECTATOR);
+                                event.getPlayer().sendMessage(DiscordLocaleAPI.getMessage(en_US ,"link_link"));
+                            }
+
+                            return;
+                        }
+
+                        event.getPlayer().kickPlayer(TextUtil.colorize(
+                                config.getKickNotInGuild().replaceAll("%tag%", user.getAsTag())));
+                    }
             );
         });
     }
@@ -189,12 +185,12 @@ public class PlayerStatusListener {
                 // Send custom death message if status is enabled, else handle normally
                 if (config.isStatusEnabled()) {
                     platform.broadcast(TextUtil.colorize(
-                            config.getStatusDeathLinked()
-                                    .replaceAll("%username%", event.getPlayer().getName())
-                                    .replaceAll("%tag%", member.getUser().getAsTag())
-                                    .replaceAll("%cause%", causeWithoutName))
-                                    .replaceAll("%color%", member.getColor() != null ?
-                                            TextUtil.colorToChatString(member.getColor()) : "&7"));
+                                    config.getStatusDeathLinked()
+                                            .replaceAll("%username%", event.getPlayer().getName())
+                                            .replaceAll("%tag%", member.getUser().getAsTag())
+                                            .replaceAll("%cause%", causeWithoutName))
+                            .replaceAll("%color%", member.getColor() != null ?
+                                    TextUtil.colorToChatString(member.getColor()) : "&7"));
                 }
 
                 if (config.isChannelBroadcastDeath())

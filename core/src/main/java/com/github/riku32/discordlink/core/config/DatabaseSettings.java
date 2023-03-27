@@ -41,7 +41,7 @@ public class DatabaseSettings {
     /**
      * Generate connection URI for platform type
      *
-     * @param folder location to store the file in
+     * @param folder   location to store the file in
      * @param fileName name of the file to use for database, do not include extension
      * @return Connection URI
      */

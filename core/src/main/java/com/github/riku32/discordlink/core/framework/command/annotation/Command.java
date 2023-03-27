@@ -14,6 +14,8 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Command {
     String[] aliases();
+
     String permission() default "";
+
     boolean userOnly() default false;
 }

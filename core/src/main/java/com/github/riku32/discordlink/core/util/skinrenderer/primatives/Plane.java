@@ -16,7 +16,7 @@ public class Plane extends Primitive {
         if (tcbo == Integer.MAX_VALUE) {
             if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Creating texture coord buffer");
             tcbo = glGenBuffers();
-            FloatBuffer uv = BufferUtils.createFloatBuffer(texture.u.length+texture.v.length);
+            FloatBuffer uv = BufferUtils.createFloatBuffer(texture.u.length + texture.v.length);
             for (int i = 0; i < texture.u.length; i++) {
                 uv.put(texture.u[i]);
                 uv.put(texture.v[i]);

@@ -36,7 +36,7 @@ public class BodyRenderer extends Renderer {
         Group group2 = new Group();
         if (flip) {
             group2.rotZ = 180;
-            group2.y = ((-group.y)*2)+(full ? 0.3f : -0.25f);
+            group2.y = ((-group.y) * 2) + (full ? 0.3f : -0.25f);
         }
         group.members.add(group2);
 
@@ -47,7 +47,6 @@ public class BodyRenderer extends Renderer {
         head2.scaleX = head2.scaleY = head2.scaleZ = 1.05f;
         head2.texture = TextureType.HEAD2;
         head2.depthMask = false;
-
 
 
         Cube body = new Cube();
@@ -63,7 +62,6 @@ public class BodyRenderer extends Renderer {
         body2.scaleX = 1.05f;
         body2.texture = TextureType.BODY2;
         body2.depthMask = false;
-
 
 
         Cube larm = new Cube();

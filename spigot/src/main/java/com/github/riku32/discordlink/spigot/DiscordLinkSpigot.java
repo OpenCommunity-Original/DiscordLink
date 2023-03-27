@@ -6,7 +6,9 @@ import com.github.riku32.discordlink.core.framework.eventbus.EventBus;
 import com.github.riku32.discordlink.core.framework.PlatformPlugin;
 import com.github.riku32.discordlink.core.framework.PlatformPlayer;
 import com.github.riku32.discordlink.core.framework.command.CompiledCommand;
+import com.github.riku32.discordlink.core.locale.DiscordLocaleAPI;
 import com.github.riku32.discordlink.spigot.events.MainListener;
+import com.github.riku32.discordlink.spigot.utils.LocaleAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
@@ -40,12 +42,19 @@ public final class DiscordLinkSpigot extends JavaPlugin implements PlatformPlugi
 
         // This should automatically create and register the platform plugin
         discordLink = new DiscordLink(this);
-        commandManager.setLocale(discordLink.getLocale());
 
         // Register command after initialization
         PluginCommand mainCommand = Objects.requireNonNull(this.getCommand("discord"));
         mainCommand.setExecutor(commandManager);
         mainCommand.setTabCompleter(commandManager);
+
+        // Localization
+        LocaleAPI localeAPI = new LocaleAPI();
+        Bukkit.getPluginManager().registerEvents(localeAPI, this);
+        localeAPI.loadSupportedLocales(this);
+
+        DiscordLocaleAPI discordLocaleAPI = new DiscordLocaleAPI(this);
+        discordLocaleAPI.loadSupportedLocales(this);
     }
 
     @Override

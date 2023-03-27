@@ -7,29 +7,12 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.opengl.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Locale;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.GL40;
-import org.lwjgl.opengl.GL41;
-import org.lwjgl.opengl.GL42;
-import org.lwjgl.opengl.GL43;
-import org.lwjgl.opengl.GL44;
-import org.lwjgl.opengl.GL45;
 
 import static org.lwjgl.glfw.GLFW.GLFW_NO_ERROR;
 import static org.lwjgl.glfw.GLFW.glfwGetError;
@@ -74,7 +57,7 @@ public class Errors {
     }
 
     private static String toTitleCase(String str) {
-        return str.charAt(0)+str.substring(1).toLowerCase(Locale.ROOT);
+        return str.charAt(0) + str.substring(1).toLowerCase(Locale.ROOT);
     }
 
     public static void checkGLError() {
@@ -83,7 +66,7 @@ public class Errors {
             while (err != GL_NO_ERROR) {
                 buildMapping();
                 DiscordLink.LOGGER.warning("== GL ERROR ==");
-                DiscordLink.LOGGER.warning("0x"+Integer.toHexString(err).toUpperCase(Locale.ROOT)+" ("+Joiner.on(", ").join(mapping.get(err))+")");
+                DiscordLink.LOGGER.warning("0x" + Integer.toHexString(err).toUpperCase(Locale.ROOT) + " (" + Joiner.on(", ").join(mapping.get(err)) + ")");
                 for (StackTraceElement ste : new Throwable().fillInStackTrace().getStackTrace())
                     DiscordLink.LOGGER.warning(ste.toString());
                 err = glGetError();
@@ -97,7 +80,7 @@ public class Errors {
             while (err != GLFW_NO_ERROR) {
                 buildMapping();
                 DiscordLink.LOGGER.warning("== GLFW ERROR ==");
-                DiscordLink.LOGGER.warning("0x"+Integer.toHexString(err).toUpperCase(Locale.ROOT)+" ("+Joiner.on(", ").join(mapping.get(err))+")");
+                DiscordLink.LOGGER.warning("0x" + Integer.toHexString(err).toUpperCase(Locale.ROOT) + " (" + Joiner.on(", ").join(mapping.get(err)) + ")");
                 for (StackTraceElement ste : new Throwable().fillInStackTrace().getStackTrace())
                     DiscordLink.LOGGER.warning(ste.toString());
                 err = glfwGetError(null);
@@ -111,7 +94,7 @@ public class Errors {
             buildMapping();
             if (status != GL_FRAMEBUFFER_COMPLETE) {
                 DiscordLink.LOGGER.warning("== FRAMEBUFFER INCOMPLETE ==");
-                DiscordLink.LOGGER.warning("0x"+Integer.toHexString(status).toUpperCase(Locale.ROOT)+" ("+ Joiner.on(", ").join(mapping.get(status))+")");
+                DiscordLink.LOGGER.warning("0x" + Integer.toHexString(status).toUpperCase(Locale.ROOT) + " (" + Joiner.on(", ").join(mapping.get(status)) + ")");
                 for (StackTraceElement ste : new Throwable().fillInStackTrace().getStackTrace())
                     DiscordLink.LOGGER.warning(ste.toString());
             }

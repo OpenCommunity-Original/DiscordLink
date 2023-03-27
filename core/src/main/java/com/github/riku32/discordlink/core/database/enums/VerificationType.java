@@ -7,6 +7,7 @@ public enum VerificationType {
     CODE("code");
 
     public final String label;
+
     VerificationType(String label) {
         this.label = label;
     }

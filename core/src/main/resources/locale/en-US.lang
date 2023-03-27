@@ -1,21 +1,3 @@
-command_invalid_args:  "&7Invalid arguments provided for command &e%command%"
-command_no_permission:  "&7You do not have the permission node (&e%permission%&7) to execute this command"
-command_invalid_command:  "&7The provided command was invalid"
-command_no_console: "7This command (&e%command%&7) may only be executed by a player"
-
-link_link: "7Please link your discord account with &e/dl link <discord tag>"
-link_already_linked: "7Your account is already linked to &e%tag%"
-link_already_linked_unlink: "7Your account is already linked to &e%tag%&7. You can unlink your account with &e/dl unlink"
-link_in_process: "7Currently in the process of linking to &e%tag%&7, if this is a mistake type &e/dl cancel&7 or click cancel on the discord message"
-link_account_invalid: "7Invalid tag provided, must be in the discord server to link"
-link_discord_linked: "7That discord account is already linked or in the process of linking with another minecraft account"
-link_dm_disabled: "7Your discord account has DMs disabled. Please enable DMs and try again"
-link_verify: "7Please verify in your discord DMs. Type &e/dl cancel&7 to cancel this process"
-
-join_unregistered: "7You are not registered, type &e/dl link <your discord tag> &7to play on this server"
-join_verify_link: "7Please verify your account link. Respond to the discord DM to &e%user_tag%&7 from &e%bot_tag%\n&7If this is the wrong account do &e/dl cancel &7or press the cancel button on the discord DM"
-join_left_server: "cYou have left the discord server, your account has automatically unlinked from discord"
-
 # Command handler
 command_version: "&7Running OpenCommunity DiscordLink %version%"
 command_invalid_args: "&7Invalid arguments provided for command &e%command%"

@@ -2,8 +2,8 @@ package com.github.riku32.discordlink.core.util.skinrenderer.primatives;
 
 import com.github.riku32.discordlink.core.DiscordLink;
 import com.github.riku32.discordlink.core.util.skinrenderer.Errors;
-import com.github.riku32.discordlink.core.util.skinrenderer.renderers.Renderer;
 import com.github.riku32.discordlink.core.util.skinrenderer.TextureType;
+import com.github.riku32.discordlink.core.util.skinrenderer.renderers.Renderer;
 
 import java.util.logging.Level;
 
@@ -32,17 +32,19 @@ public abstract class Primitive {
     protected void doRender(Renderer renderer, int vbo, int tcbo, float[] vertices) {
         glPushMatrix();
         glDepthMask(depthMask);
-        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Rendering "+getClass().getSimpleName());
-        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Translating to "+x+", "+y+", "+z);
+        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Rendering " + getClass().getSimpleName());
+        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Translating to " + x + ", " + y + ", " + z);
         glTranslatef(x, y, z);
-        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Rotating by "+rotX+"°, "+rotY+"°, "+rotZ+"°, anchored at "+anchorX+", "+anchorY+", "+anchorZ);
+        if (DiscordLink.DEBUG_MODE)
+            DiscordLink.LOGGER.finest("Rotating by " + rotX + "°, " + rotY + "°, " + rotZ + "°, anchored at " + anchorX + ", " + anchorY + ", " + anchorZ);
         glTranslatef(anchorX, anchorY, anchorZ);
         glRotatef(rotX, 1, 0, 0);
         glRotatef(rotY, 0, 1, 0);
         glRotatef(rotZ, 0, 0, 1);
         glTranslatef(-anchorX, -anchorY, -anchorZ);
-        if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Scaling by "+scaleX+"x, "+scaleY+"x, "+scaleZ+"x");
-        glScalef(scaleX, scaleY*-1, scaleZ);
+        if (DiscordLink.DEBUG_MODE)
+            DiscordLink.LOGGER.finest("Scaling by " + scaleX + "x, " + scaleY + "x, " + scaleZ + "x");
+        glScalef(scaleX, scaleY * -1, scaleZ);
 
         if (!inStage && lit) {
             if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Enabling lighting");
@@ -52,7 +54,7 @@ public abstract class Primitive {
             glDisable(GL_LIGHTING);
         }
         if (textured) {
-            if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.log(Level.FINEST, "Enabling texturing - texture "+texture);
+            if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.log(Level.FINEST, "Enabling texturing - texture " + texture);
             glEnable(GL_TEXTURE_2D);
             if (texture == TextureType.ALL) {
                 glBindTexture(GL_TEXTURE_2D, renderer.owner.shadowTexture);
@@ -93,9 +95,9 @@ public abstract class Primitive {
 
         if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Rendering");
         if (tcbo == Integer.MAX_VALUE)
-            glDrawArrays(GL_QUADS, 0, vertices.length/5);
+            glDrawArrays(GL_QUADS, 0, vertices.length / 5);
         else
-            glDrawArrays(GL_QUADS, 0, vertices.length/6);
+            glDrawArrays(GL_QUADS, 0, vertices.length / 6);
 
         Errors.checkGLError();
 

@@ -16,11 +16,10 @@ import java.util.Base64;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
 
 /**
  * Mojang API utility to access data from the Mojang API
- *
+ * <p>
  * TODO: Stop using this, offline servers wont work, store in a DB cache instead
  */
 public class MojangAPI {
@@ -66,17 +65,18 @@ public class MojangAPI {
                     try {
                         slim.set(skinData.getJSONObject("metadata")
                                 .getBoolean("model"));
-                    } catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
 
                     return skinData.getString("url");
                 }).thenCompose(url -> httpClient.sendAsync(HttpRequest.newBuilder()
-                            .uri(URI.create(url)).build(), HttpResponse.BodyHandlers.ofByteArray()))
+                        .uri(URI.create(url)).build(), HttpResponse.BodyHandlers.ofByteArray()))
                 .thenApply(res -> {
                     try {
                         return new RenderConfiguration(
-                                    renderType,
-                                    ImageIO.read(new ByteArrayInputStream(res.body())),
-                                    slim.get());
+                                renderType,
+                                ImageIO.read(new ByteArrayInputStream(res.body())),
+                                slim.get());
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

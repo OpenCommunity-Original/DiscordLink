@@ -51,7 +51,7 @@ public abstract class Renderer {
             if (slim) modes.add("slim");
             if (full) modes.add("full");
             if (flip) modes.add("flip");
-            DiscordLink.LOGGER.finer("["+name+"] Initializing primitives"+(modes.isEmpty() ? "" : " ("+ Joiner.on(", ").join(modes)+")"));
+            DiscordLink.LOGGER.finer("[" + name + "] Initializing primitives" + (modes.isEmpty() ? "" : " (" + Joiner.on(", ").join(modes) + ")"));
         }
         initPrimitives(slim, full, flip);
         initialized = true;
@@ -62,14 +62,15 @@ public abstract class Renderer {
     }
 
     protected abstract void initPrimitives(boolean slim, boolean full, boolean flip);
+
     protected void initGL(float width, float height) {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
-        glViewport(0, 0, (int)width, (int)height);
+        glViewport(0, 0, (int) width, (int) height);
         glEnable(GL_DEPTH_TEST);
 
         double fov = 45;
-        double aspect = width/height;
+        double aspect = width / height;
 
         double zNear = 0.1;
         double zFar = 100;
@@ -84,7 +85,8 @@ public abstract class Renderer {
         glEnable(GL_CULL_FACE);
     }
 
-    public void finish() {}
+    public void finish() {
+    }
 
     public BufferedImage readPixels(int width, int height) {
         glReadBuffer(GL_FRONT);
@@ -92,7 +94,7 @@ public abstract class Renderer {
         glReadPixels(0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, buf);
         checkGLError();
         BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        int[] pixels = new int[width*height];
+        int[] pixels = new int[width * height];
         buf.asIntBuffer().get(pixels);
         img.setRGB(0, 0, width, height, pixels, 0, width);
         if (DiscordLink.DEBUG_MODE) DiscordLink.LOGGER.finest("Read pixels");

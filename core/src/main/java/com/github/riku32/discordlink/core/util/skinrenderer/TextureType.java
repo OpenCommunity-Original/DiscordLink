@@ -257,26 +257,26 @@ public enum TextureType {
     // where <side> is the face in question, in order:
     // Front, Back, Top, Bottom, Left, Right
     TextureType(int... assorted) {
-        for (int i = 0; i < assorted.length/4; i++) {
-            int idx = i*4;
+        for (int i = 0; i < assorted.length / 4; i++) {
+            int idx = i * 4;
 
             int x = assorted[idx];
-            int y = assorted[idx+1];
-            int edgeX = x + assorted[idx+2];
-            int edgeY = y + assorted[idx+3];
+            int y = assorted[idx + 1];
+            int edgeX = x + assorted[idx + 2];
+            int edgeY = y + assorted[idx + 3];
 
             // slightly shrink the box to prevent texture bleeding
-            u[idx] = div(tex_w,     x)+0.001f;
-            v[idx] = div(tex_h, edgeY)-0.001f;
+            u[idx] = div(tex_w, x) + 0.001f;
+            v[idx] = div(tex_h, edgeY) - 0.001f;
 
-            u[idx+1] = div(tex_w, edgeX)-0.001f;
-            v[idx+1] = div(tex_h, edgeY)-0.001f;
+            u[idx + 1] = div(tex_w, edgeX) - 0.001f;
+            v[idx + 1] = div(tex_h, edgeY) - 0.001f;
 
-            u[idx+2] = div(tex_w, edgeX)-0.001f;
-            v[idx+2] = div(tex_h,     y)+0.001f;
+            u[idx + 2] = div(tex_w, edgeX) - 0.001f;
+            v[idx + 2] = div(tex_h, y) + 0.001f;
 
-            u[idx+3] = div(tex_w,     x)+0.001f;
-            v[idx+3] = div(tex_h,     y)+0.001f;
+            u[idx + 3] = div(tex_w, x) + 0.001f;
+            v[idx + 3] = div(tex_h, y) + 0.001f;
         }
     }
 

@@ -1,6 +1,5 @@
 package com.github.riku32.discordlink.spigot;
 
-import com.github.riku32.discordlink.core.locale.Locale;
 import com.github.riku32.discordlink.core.framework.PlatformPlayer;
 import com.github.riku32.discordlink.core.framework.command.ArgumentData;
 import com.github.riku32.discordlink.core.framework.command.CommandData;
@@ -30,10 +29,6 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
         this.playerRegistry = playerRegistry;
     }
 
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
-
     public void addCommand(CompiledCommand compiledCommand) {
         Arrays.stream(compiledCommand.getBaseCommand().getAliases())
                 .forEach(alias -> commandMap.put(alias, compiledCommand));
@@ -61,23 +56,20 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
         }
 
         if (command.getBaseCommand().isUserOnly() && sender.isConsole()) {
-            sender.sendMessage(locale.getElement("command.no_console")
-                    .set("command", args[0]).error());
+            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_no_console"));
             return false;
         }
 
         // Make sure base command permission is met
         if (command.getBaseCommand().getPermission() != null && !commandSender.hasPermission(command.getBaseCommand().getPermission())) {
-            sender.sendMessage(locale.getElement("command.no_permission")
-                    .set("permission", command.getBaseCommand().getPermission()).error());
+            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_no_permission"));
             return false;
         }
 
         // Execute base command without arguments
         if (args.length == 1) {
             if (command.getBaseCommand().getArguments().size() != 0) {
-                sender.sendMessage(locale.getElement("command.invalid_args")
-                        .set("command", args[0]).error());
+                sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_args"));
                 return false;
             }
 
@@ -96,22 +88,19 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
                 if (alias.equals(args[1])) {
                     try {
                         if (commandData.isUserOnly() && sender.isConsole()) {
-                            sender.sendMessage(locale.getElement("command.no_console")
-                                    .set("command", String.format("%s %s", args[0], alias)).error());
+                            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_no_console"));
                             return false;
                         }
 
                         // Check if sub command permissions are met
                         if (commandData.getPermission() != null && !commandSender.hasPermission(commandData.getPermission())) {
-                            sender.sendMessage(locale.getElement("command.no_permission")
-                                    .set("permission", commandData.getPermission()).error());
+                            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_no_permission"));
                             return false;
                         }
 
                         // Subtract two from length since one of the args will be the subcommand name and one will be base command
                         if (commandData.getArguments().size() != args.length - 2) {
-                            sender.sendMessage(locale.getElement("command.invalid_args")
-                                    .set("command", String.format("%s %s", args[0], alias)).error());
+                            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_args"));
                             return false;
                         }
 
@@ -123,8 +112,7 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
                             ArgumentParseResult parseResult = parseArgument(commandData.getArguments().get(i - 2), args[i]);
 
                             if (!parseResult.success) {
-                                sender.sendMessage(locale.getElement("command.invalid_args")
-                                        .set("command", String.format("%s %s", args[0], alias)).error());
+                                sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_args"));
                                 return false;
                             }
 
@@ -142,8 +130,7 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
 
         // Validate arguments for base with args, subtract one from length because command name is an arg
         if (command.getBaseCommand().getArguments().size() != args.length - 1) {
-            sender.sendMessage(locale.getElement("command.invalid_args")
-                    .set("command", args[0]).error());
+            sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_args"));
             return false;
         }
 
@@ -155,8 +142,7 @@ public class SpigotCommand implements CommandExecutor, TabCompleter {
             ArgumentParseResult parseResult = parseArgument(command.getBaseCommand().getArguments().get(i - 1), args[i]);
 
             if (!parseResult.success) {
-                sender.sendMessage(locale.getElement("command.invalid_args")
-                        .set("command", args[0]).error());
+                sender.sendMessage(LocaleAPI.getMessage((Player) sender, "command_invalid_args"));
                 return false;
             }
 
